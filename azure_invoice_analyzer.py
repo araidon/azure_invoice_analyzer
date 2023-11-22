@@ -11,7 +11,9 @@ def read_csv_file(csv_file):
     """
     print(f"・ファイル読み込み開始: {datetime.datetime.now()}")
     df = pd.read_csv(csv_file, encoding="cp932", engine="pyarrow")
+    print(f"・読み取り行数: {len(df)}")  # 行数を表示
     print(f"・ファイル読み込み終了: {datetime.datetime.now()}")
+
     return df
 
 
@@ -40,6 +42,20 @@ def process_invoice(df):
 
 def write_csv(filename, headerstr, data_dict):
     """
+    Write the data from a 2D dictionary to a CSV file.
+    """
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(f"{headerstr}\n")
+        for key, sub_dict in data_dict.items():
+            row = f"{key},"
+            for value in sub_dict.values():
+                if int(value) == 0:
+                    continue  # skip if the value is 0
+                row += f"{int(value)},"
+            f.write(row[:-1] + "\n")
+
+def write_csv2(filename, headerstr, data_dict):
+    """
     辞書のデータをCSVファイルに書き込む関数
     """
     with open(filename, 'w', encoding='utf-8') as f:
@@ -48,7 +64,6 @@ def write_csv(filename, headerstr, data_dict):
             if int(value) == 0:
                 continue  # 0円はskip
             f.write(f"{key},{int(value)}\n")
-
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -62,6 +77,7 @@ if __name__ == "__main__":
 
     print(f"product種類: {len(product_dict)}")
     total_cost = sum(value["コスト"] for value in product_dict.values())
-    print(f"金額合計: {total_cost}")
+    print(f"金額合計: \{int(total_cost)}/month")
 
-    write_csv("dict2.csv", "製品,金額", product_dict2)
+    write_csv("product_quantity_cost.csv", "製品,数量,金額", product_dict)
+    write_csv2("product_cost.csv", "製品,金額", product_dict2)
