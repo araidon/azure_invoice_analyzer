@@ -49,8 +49,8 @@ def write_csv(filename, headerstr, data_dict):
         for key, sub_dict in data_dict.items():
             row = f"{key},"
             for value in sub_dict.values():
-                if int(value) == 0:
-                    continue  # skip if the value is 0
+                # if int(value) == 0:
+                #     continue  # skip if the value is 0
                 row += f"{int(value)},"
             f.write(row[:-1] + "\n")
 
@@ -79,5 +79,10 @@ if __name__ == "__main__":
     total_cost = sum(value["コスト"] for value in product_dict.values())
     print(f"金額合計: \{int(total_cost)}/month")
 
-    write_csv("product_quantity_cost.csv", "製品,数量,金額", product_dict)
-    write_csv2("product_cost.csv", "製品,金額", product_dict2)
+    # 製品ごとの数量と金額をソートしてCSVファイルに書き込む
+    sorted_product_dict = dict(sorted(product_dict.items(), key=lambda x: x[0]))
+    write_csv("product_quantity_cost.csv", "製品 (Product),数量 (Quantity),コスト (Cost)", sorted_product_dict)
+
+    # 製品ごとの金額をソートしてCSVファイルに書き込む
+    sorted_product_dict2 = dict(sorted(product_dict2.items(), key=lambda x: x[0]))
+    write_csv2("product_cost.csv", "製品,金額", sorted_product_dict2)
