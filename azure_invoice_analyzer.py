@@ -44,7 +44,7 @@ def write_csv(filename, headerstr, data_dict):
     """
     Write the data from a 2D dictionary to a CSV file.
     """
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(filename, 'w', encoding='cp932') as f:
         f.write(f"{headerstr}\n")
         for key, sub_dict in data_dict.items():
             row = f"{key},"
@@ -58,7 +58,7 @@ def write_csv2(filename, headerstr, data_dict):
     """
     辞書のデータをCSVファイルに書き込む関数
     """
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(filename, 'w', encoding='cp932') as f:
         f.write(f"{headerstr}\n")
         for key, value in data_dict.items():
             if int(value) == 0:
